@@ -30,7 +30,7 @@ use yii\db\Query;
  *
  * @property \yii\db\ActiveRecord $owner
  */
-class AuditingBehavior extends Behavior
+class AuditBehavior extends Behavior
 {
     /**
      * Array con atributos modificados del registro activo.
