@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * Copyright (C) 2022 Néstor Acevedo <soporte at neoacevedo.co>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 namespace neoacevedo\auditing\models;
 
 use Yii;
@@ -36,8 +53,12 @@ class Auditing extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::class,
-            'updatedAtAttribute' => false
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
         ];
     }
 
@@ -47,9 +68,8 @@ class Auditing extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
+            [['user_id', 'created_at'], 'integer'],
             [['event', 'model', 'attribute'], 'required'],
-            [['created_at'], 'safe'],
             [['description', 'model', 'attribute', 'old_value', 'new_value', 'action'], 'string', 'max' => 255],
             [['event', 'ip'], 'string', 'max' => 45],
         ];

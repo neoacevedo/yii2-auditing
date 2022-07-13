@@ -116,26 +116,28 @@ class AuditBehavior extends Behavior
     protected function audit(string $event)
     {
         // If this is a delete then just write one row and get out of here
-        if ($event == 'DELETE') {
-            (new Auditing([
-                'user_id' => Yii::$app->user->id,
-                'description' => 'User ' . Yii::$app->user->username . ' deleted '
+        if ($event === 'DELETE') {
+            $controllerClass = new \ReflectionClass(Yii::$app->controller);
+            $audit = new Auditing();
+            $audit->user_id = Yii::$app->user->id;
+            $audit->description = 'User ' . Yii::$app->user->identity->username . " deleted "
                     . get_class($this->owner)
-                    . '[' . $this->owner->getPrimaryKey() .'].',
-                'event' => $event,
-                'model' => get_class($this->owner),
-                'attribute' => '',
-                'old_value' => '',
-                'new_value' => '',
-                'action' => Yii::$app->requestedRoute,
-                'ip' => Yii::$app->request->remoteIP,
-                'created_at' => time()
-            ]))->save();
-            return;
+                    . '[' . $this->getNormalizedPk() .'].';
+            $audit->event = "DELETE";
+            $audit->model = get_class($this->owner);
+            $audit->attribute = "NULL";
+            $audit->action = $controllerClass->getName().'::'. Yii::$app->requestedAction->actionMethod . "()";
+            $audit->ip = Yii::$app->request->remoteIP;
+            // $audit->created_at = time();
+            if (!$audit->save()) {
+                @array_walk_recursive($audit->errors, function ($v, $k) {
+                    Yii::error($v, 'audit');
+                });
+            }
+        } else {
+            // Now lets actually write the attributes
+            $this->auditAttributes($event);
         }
-        
-        // Now lets actually write the attributes
-        $this->auditAttributes($event);
     }
     
     /**
@@ -146,30 +148,50 @@ class AuditBehavior extends Behavior
     protected function auditAttributes(string $event)
     {
         // Get the new and old attributes
-        $newAttributes = $this->cleanAttributes($this->owner->getAttributes());
-        $oldAttributes = $this->cleanAttributes($this->getOldAttributes());
+        $newAttributes = $this->owner->getAttributes();
+        $oldAttributes = $this->getOldAttributes();
 
         foreach ($newAttributes as $key => $value) {
-            if (!empty($oldattributes)) {
-                $old_value = $oldattributes[$key];
-            } else {
-                $old_value = '';
+            if (in_array($key, $this->ignored)) {
+                continue;
             }
-            
-            (new Auditing([
-                'user_id' => Yii::$app->user->id,
-                'description' => 'User ' . Yii::$app->user->username . " " . strtolower($event) . " "
+            if (!empty($oldAttributes)) {
+                $old_value = $oldAttributes[$key];
+            } else {
+                $old_value = 'NULL';
+            }
+
+            $controllerClass = new \ReflectionClass(Yii::$app->controller);
+
+            if ($old_value !== $value) {
+                $audit = new Auditing();
+                $audit->user_id = Yii::$app->user->id;
+                $audit->description = 'User ' . Yii::$app->user->identity->username . " " . strtolower($event) . " "
                     . get_class($this->owner)
-                    . '[' . $this->owner->getPrimaryKey() .'].',
-                'model' => get_class($this->owner),
-                'attribute' => $key,
-                'old_value' => $old_value,
-                'new_value' => $value,
-                'action' => Yii::$app->requestedRoute,
-                'ip' => Yii::$app->request->remoteIP,
-                'action' => Yii::$app->requestedRoute,
-                'created_at' => time()
-            ]))->save();
+                    . '[' . $this->getNormalizedPk() .'].';
+                $audit->event = $event;
+                $audit->model = get_class($this->owner);
+                $audit->attribute = $key;
+                $audit->old_value = $old_value;
+                $audit->new_value = $value;
+                $audit->action = $controllerClass->getName() .'::'. Yii::$app->requestedAction->actionMethod . "()";
+                $audit->ip = Yii::$app->request->remoteIP;
+                // $audit->created_at = time();
+                if (!$audit->save()) {
+                    @array_walk_recursive($audit->errors, function ($v, $k) {
+                        Yii::error($v, 'audit');
+                    });
+                }
+            }
         }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNormalizedPk()
+    {
+        $pk = $this->owner->getPrimaryKey();
+        return is_array($pk) ? json_encode($pk) : $pk;
     }
 }
