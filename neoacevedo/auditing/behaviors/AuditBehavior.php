@@ -130,9 +130,9 @@ class AuditBehavior extends Behavior
             $audit->ip = Yii::$app->request->remoteIP;
             // $audit->created_at = time();
             if (!$audit->save()) {
-                @array_walk_recursive($audit->errors, function ($v, $k) {
-                    Yii::error($v, 'audit');
-                });
+                foreach ($audit->errors as $key => $error) {
+					Yii::error($error[0], 'audit');
+				}
             }
         } else {
             // Now lets actually write the attributes
@@ -156,7 +156,7 @@ class AuditBehavior extends Behavior
                 continue;
             }
             if (!empty($oldAttributes)) {
-                $old_value = $oldAttributes[$key];
+                $old_value = (string) $oldAttributes[$key];
             } else {
                 $old_value = 'NULL';
             }
@@ -178,9 +178,9 @@ class AuditBehavior extends Behavior
                 $audit->ip = Yii::$app->request->remoteIP;
                 // $audit->created_at = time();
                 if (!$audit->save()) {
-                    @array_walk_recursive($audit->errors, function ($v, $k) {
-                        Yii::error($v, 'audit');
-                    });
+                    foreach ($audit->errors as $key => $error) {
+						Yii::error($error[0], 'audit');
+					}
                 }
             }
         }
