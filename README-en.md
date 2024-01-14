@@ -1,33 +1,33 @@
 Yii2 Auditing
 =============
-Registra cambios de sus modelos ActiveRecord de Yii2.
+Record changes to your ActiveRecord models of Yii2. 
 
-Este paquete permite mantener un historial de cambios de los modelos proveyendo información sobre posibles discrepancias o anomalías en la información que puedan indicar actividades sospechosas. La información recibida y almacenada se puede posteriormente desplegar de diversas maneras.
+This package allows you to maintain a history of model changes by providing information on possible discrepancies or anomalies in the information that may indicate suspicious activity. Information received and stored can then be deployed in various ways. 
 
-Instalación
+Instalation
 ------------
 
-La forma preferida de instalar esta extensión es a través de [composer](http://getcomposer.org/download/).
+The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-Luego ejecute
+Either run
 
 ```
 php composer.phar require --prefer-dist neoacevedo/yii2-auditing "*"
 ```
 
-o agregue
+or add
 
 ```
 "neoacevedo/yii2-auditing": "*"
 ```
 
-a la sección require de su archivo `composer.json`.
+to the required section of your `composer.json`.
 
 
-Uso
+Usage
 -----
 
-Una vez que la extensión está instalada, en el archivo de configuración de la consola de su aplicación, agregue en la zona `migrationPath`
+Once installed this extension, in your application config file, add into the `migrationPath` zone
 
 ```php
 ...
@@ -35,8 +35,7 @@ Una vez que la extensión está instalada, en el archivo de configuración de la
 ...
 ```
 
-
-luego, agregue en el código de su modelo dentro del método `behaviors`:
+Then, add in your model code within `behaviors` method:
 
 ```php
 public function behaviors()
@@ -48,12 +47,12 @@ public function behaviors()
 }
 ```
 
-Desplegando la información
+Deploying information
 ---
 
-Puede desplegar la información como cualquier modelo que haya implementado dentro de su aplicación web.
+You can deploy the information as any model you have implemented within your web application. 
 
-Puede hacer uso de un controlador y una vista que use `GridView` para listar el historial. Por ejemplo, puede crear un controllador que se llame `AuditingController` y crear el método `actionIndex` como lo siguiente:
+You can use a driver and a view that uses .GridView to list the history. For example, you can create a controller called "AuditingController" and create the "actionIndex" method as follows: 
 
 ```php
     /**
@@ -73,7 +72,7 @@ Puede hacer uso de un controlador y una vista que use `GridView` para listar el 
     }
 ```
 
-Para visualizar los datos, crear el método `actionView`:
+To view the data, create the `actionView`` method:
 
 ```php
     /**
@@ -90,7 +89,7 @@ Para visualizar los datos, crear el método `actionView`:
     }
 ```
 
-Dentro de la vista `view` puede agregar el `GridView` para listar el histórico:
+Inside the view `view` you can add the `GridView`` to list the historic:
 
 ```php
 ...
