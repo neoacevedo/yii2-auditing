@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 namespace neoacevedo\auditing\behaviors;
 
 use neoacevedo\auditing\models\Auditing;
@@ -120,26 +120,26 @@ class AuditBehavior extends Behavior
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
             $audit = new Auditing();
             $audit->user_id = Yii::$app->user->id;
-            $audit->description = 'User ' . Yii::$app->user->identity->username . " deleted "
-                    . get_class($this->owner)
-                    . '[' . $this->getNormalizedPk() .'].';
+            $audit->description = 'User ' . (Yii::$app->user->identity->username ?? $audit->user_id) . " deleted "
+                . get_class($this->owner)
+                . '[' . $this->getNormalizedPk() . '].';
             $audit->event = "DELETE";
             $audit->model = get_class($this->owner);
             $audit->attribute = "NULL";
-            $audit->action = $controllerClass->getName().'::'. Yii::$app->requestedAction->actionMethod . "()";
+            $audit->action = $controllerClass->getName() . '::' . Yii::$app->requestedAction->actionMethod . "()";
             $audit->ip = Yii::$app->request->remoteIP;
             // $audit->created_at = time();
             if (!$audit->save()) {
                 foreach ($audit->errors as $key => $error) {
-					Yii::error($error[0], 'audit');
-				}
+                    Yii::error($error[0], 'audit');
+                }
             }
         } else {
             // Now lets actually write the attributes
             $this->auditAttributes($event);
         }
     }
-    
+
     /**
      * Registra los eventos de inserción o actualización del registro activo.
      * @param string $event Evento a registrar (INSERT|UPDATE)
@@ -164,23 +164,24 @@ class AuditBehavior extends Behavior
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
 
             if ($old_value !== $value) {
+                $user_id = explode("-", Yii::$app->user->id)[1];
                 $audit = new Auditing();
-                $audit->user_id = Yii::$app->user->id;
+                $audit->user_id = $user_id;
                 $audit->description = 'User ' . Yii::$app->user->identity->username . " " . strtolower($event) . " "
                     . get_class($this->owner)
-                    . '[' . $this->getNormalizedPk() .'].';
+                    . '[' . $this->getNormalizedPk() . '].';
                 $audit->event = $event;
                 $audit->model = get_class($this->owner);
                 $audit->attribute = $key;
                 $audit->old_value = $old_value;
                 $audit->new_value = $value;
-                $audit->action = $controllerClass->getName() .'::'. Yii::$app->requestedAction->actionMethod . "()";
+                $audit->action = $controllerClass->getName() . '::' . Yii::$app->requestedAction->actionMethod . "()";
                 $audit->ip = Yii::$app->request->remoteIP;
                 // $audit->created_at = time();
                 if (!$audit->save()) {
                     foreach ($audit->errors as $key => $error) {
-						Yii::error($error[0], 'audit');
-					}
+                        Yii::error($error[0], 'audit');
+                    }
                 }
             }
         }
