@@ -32,6 +32,13 @@ use yii\db\Query;
  */
 class AuditBehavior extends Behavior
 {
+
+    /**
+     * Componente de usuario de inicio de sesión.
+     * @var \yii\web\User
+     */
+    public $userComponent;
+
     /**
      * Array con atributos modificados del registro activo.
      * @var array
@@ -119,8 +126,10 @@ class AuditBehavior extends Behavior
         if ($event === 'DELETE') {
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
             $audit = new Auditing();
-            $audit->user_id = Yii::$app->user->id;
-            $audit->description = 'User ' . (Yii::$app->user->identity->username ?? $audit->user_id) . " deleted "
+            $user_id = !Yii::$app->user->isGuest ? explode("-", Yii::$app->user->id)[1] : null;
+            $username = !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : 'guess';
+            $audit->user_id = $user_id;
+            $audit->description = 'User ' . $username . " deleted "
                 . get_class($this->owner)
                 . '[' . $this->getNormalizedPk() . '].';
             $audit->event = "DELETE";
@@ -164,10 +173,12 @@ class AuditBehavior extends Behavior
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
 
             if ($old_value !== $value) {
-                $user_id = explode("-", Yii::$app->user->id)[1];
+                $user_id = !Yii::$app->user->isGuest ? explode("-", Yii::$app->user->id)[1] : null;
+                $username = !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : 'guess';
+
                 $audit = new Auditing();
                 $audit->user_id = $user_id;
-                $audit->description = 'User ' . Yii::$app->user->identity->username . " " . strtolower($event) . " "
+                $audit->description = 'User ' . $username . " " . strtolower($event) . " "
                     . get_class($this->owner)
                     . '[' . $this->getNormalizedPk() . '].';
                 $audit->event = $event;
