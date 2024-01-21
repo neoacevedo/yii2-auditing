@@ -34,12 +34,6 @@ class AuditBehavior extends Behavior
 {
 
     /**
-     * Componente de usuario de inicio de sesión.
-     * @var \yii\web\User
-     */
-    public $userComponent;
-
-    /**
      * Array con atributos modificados del registro activo.
      * @var array
      */
