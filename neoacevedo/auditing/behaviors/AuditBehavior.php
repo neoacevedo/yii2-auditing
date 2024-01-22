@@ -167,7 +167,7 @@ class AuditBehavior extends Behavior
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
 
             if ($old_value !== $value) {
-                $user_id = !Yii::$app->user->isGuest ? explode("-", Yii::$app->user->id)[1] : null;
+                $user_id = !Yii::$app->user->isGuest ? (is_numeric(Yii::$app->user->id) ? Yii::$app->user->id : explode("-", Yii::$app->user->id)[1]) : null;
                 $username = !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : 'guess';
 
                 $audit = new Auditing();
