@@ -119,9 +119,10 @@ class AuditBehavior extends Behavior
         // If this is a delete then just write one row and get out of here
         if ($event === 'DELETE') {
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
-            $audit = new Auditing();
-            $user_id = !Yii::$app->user->isGuest ? explode("-", Yii::$app->user->id)[1] : null;
+            $user_id = !Yii::$app->user->isGuest ? (is_numeric(Yii::$app->user->id) ? Yii::$app->user->id : explode("-", Yii::$app->user->id)[1]) : null;
             $username = !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : 'guess';
+
+            $audit = new Auditing();
             $audit->user_id = $user_id;
             $audit->description = 'User ' . $username . " deleted "
                 . get_class($this->owner)
