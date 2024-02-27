@@ -70,8 +70,9 @@ class Auditing extends \yii\db\ActiveRecord
         return [
             [['user_id', 'created_at'], 'integer'],
             [['event', 'model', 'attribute'], 'required'],
-            [['description', 'model', 'attribute', 'old_value', 'new_value', 'action'], 'string', 'max' => 255],
+            [['description', 'model', 'attribute', 'action'], 'string', 'max' => 255],
             [['event', 'ip'], 'string', 'max' => 45],
+            [['old_value', 'new_value'], 'safe']
         ];
     }
 
