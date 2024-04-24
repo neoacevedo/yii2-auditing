@@ -46,6 +46,18 @@ class AuditBehavior extends Behavior
     public $ignored = ['created', 'updated', 'created_at', 'updated_at', 'createdAt', 'updatedAt', 'timestamp'];
 
     /**
+     * Indica si se van a borrar datos antiguos.
+     * @var bool
+     */
+    public $deleteOldData = false;
+
+    /**
+     * Número de filas a borrar.
+     * @var int
+     */
+    public $deleteNumRows = 20;
+
+    /**
      * @inheritdoc
      */
     public function events()
@@ -141,6 +153,13 @@ class AuditBehavior extends Behavior
         } else {
             // Now lets actually write the attributes
             $this->auditAttributes($event);
+        }
+
+        // Vamos a borrar datos antiguos con el fin de liberar espacio en la base de datos.
+        if ($this->deleteOldData) {
+            Yii::$app->db->createCommand("DELETE FROM %{{auditing}} limit :limit")
+                ->bindValue(':limit', $this->deleteNumRows)
+                ->execute();
         }
     }
 

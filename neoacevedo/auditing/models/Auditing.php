@@ -44,7 +44,7 @@ class Auditing extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'auditing';
+        return '{{%auditing}}';
     }
 
     /**
