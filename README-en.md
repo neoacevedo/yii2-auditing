@@ -41,7 +41,11 @@ Then, add in your model code within `behaviors` method:
 public function behaviors()
 {
     return [
-        \neoacevedo\auditing\behaviors\AuditBehavior::class,
+        [
+            'class' => \neoacevedo\auditing\behaviors\AuditBehavior::class,
+            'deleteOldData' => true, // To delete old data from the events log
+            'deleteNumRows' => 20, // It deletes this number of records
+        ],
         ...
     ];
 }

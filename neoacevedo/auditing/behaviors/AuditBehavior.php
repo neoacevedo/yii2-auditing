@@ -157,7 +157,7 @@ class AuditBehavior extends Behavior
 
         // Vamos a borrar datos antiguos con el fin de liberar espacio en la base de datos.
         if ($this->deleteOldData) {
-            Yii::$app->db->createCommand("DELETE FROM %{{auditing}} limit :limit")
+            Yii::$app->db->createCommand("DELETE FROM {${Auditing::tableName()} } limit :limit")
                 ->bindValue(':limit', $this->deleteNumRows)
                 ->execute();
         }
