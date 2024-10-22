@@ -142,7 +142,7 @@ class AuditBehavior extends Behavior
             $audit->event = "DELETE";
             $audit->model = get_class($this->owner);
             $audit->attribute = "NULL";
-            $audit->action = $controllerClass->getName() . '::' . Yii::$app->requestedAction->actionMethod . "()";
+            $audit->action = $controllerClass->getName() . '::action' . ucfirst(Yii::$app->requestedAction->id) . "()";
             $audit->ip = Yii::$app->request->remoteIP;
             // $audit->created_at = time();
             if (!$audit->save()) {
@@ -200,7 +200,7 @@ class AuditBehavior extends Behavior
                 $audit->attribute = $key;
                 $audit->old_value = $old_value;
                 $audit->new_value = $value;
-                $audit->action = $controllerClass->getName() . '::' . Yii::$app->requestedAction->actionMethod . "()";
+                $audit->action = $controllerClass->getName() . '::action' . ucfirst(Yii::$app->requestedAction->id) . "()";
                 $audit->ip = Yii::$app->request->remoteIP;
                 // $audit->created_at = time();
                 if (!$audit->save()) {
