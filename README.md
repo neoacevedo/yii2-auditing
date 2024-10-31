@@ -43,10 +43,10 @@ public function behaviors()
 {
     return [
         [
-                'class' => \neoacevedo\auditing\behaviors\AuditBehavior::class,
-                'deleteOldData' => true, // Para borrar datos antiguos del registro de eventos
-                'deleteNumRows' => 20, // Borra esta cantidad de registros
-                'exclude' => ['foo', 'bar'] // No registra en el registro de eventos estos atributos del modelo
+            'class' => \neoacevedo\auditing\behaviors\AuditBehavior::class,
+            'deleteOldData' => true, // Para borrar datos antiguos del registro de eventos
+            'deleteNumRows' => 20, // Borra esta cantidad de registros
+            'ignored' => ['foo', 'bar'], // No registra en el registro de eventos estos atributos del modelo
         ],
         ...
     ];
