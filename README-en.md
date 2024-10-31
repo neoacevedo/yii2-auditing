@@ -45,6 +45,7 @@ public function behaviors()
             'class' => \neoacevedo\auditing\behaviors\AuditBehavior::class,
             'deleteOldData' => true, // To delete old data from the events log
             'deleteNumRows' => 20, // It deletes this number of records
+            'exclude' => ['foo', 'bar'] // Do not stores in the events log these model attributes
         ],
         ...
     ];
