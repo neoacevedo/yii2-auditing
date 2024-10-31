@@ -26,8 +26,11 @@ use yii\db\ActiveRecord;
 use yii\db\Query;
 
 /**
- * Class AuditingBehavior
- *
+ * Class AuditingBehavior.
+ * 
+ * Esta clase es la que se encarga de hacer el registro de eventos en los modelos. 
+ * 
+ * @see https://www.programacion.com.py/web/php/auditoria-en-yii
  * @property \yii\db\ActiveRecord $owner
  */
 class AuditBehavior extends Behavior
@@ -181,7 +184,8 @@ class AuditBehavior extends Behavior
             if (!empty($oldAttributes)) {
                 $old_value = (string) $oldAttributes[$key];
             } else {
-                $old_value = 'NULL';
+                continue;
+                // $old_value = 'NULL';
             }
 
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
