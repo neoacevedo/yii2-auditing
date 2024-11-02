@@ -181,16 +181,12 @@ class AuditBehavior extends Behavior
             if (in_array($key, $this->ignored)) {
                 continue;
             }
-            if (!empty($oldAttributes)) {
-                $old_value = (string) $oldAttributes[$key];
-            } else {
-                continue;
-                // $old_value = 'NULL';
-            }
+
+            $old_value = (!empty($oldAttributes)) ? (string) $oldAttributes[$key] : '';
 
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
 
-            if ($old_value !== $value) {
+            if ($old_value != $value) {
                 $user_id = !Yii::$app->user->isGuest ? (is_numeric(Yii::$app->user->id) ? Yii::$app->user->id : explode("-", Yii::$app->user->id)[1]) : null;
                 $username = !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : 'guess';
 
