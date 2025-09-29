@@ -136,7 +136,7 @@ class AuditBehavior extends Behavior
             $controllerClass = new \ReflectionClass(Yii::$app->controller);
             $user_id = !Yii::$app->user->isGuest ? (is_numeric(Yii::$app->user->id) ? Yii::$app->user->id : explode("-", Yii::$app->user->id)[1]) : null;
             $username = !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : 'guess';
-
+            Yii::$app->db->beginTransaction();
             $audit = new Auditing();
             $audit->user_id = $user_id;
             $audit->description = 'User ' . $username . " deleted "
@@ -152,6 +152,9 @@ class AuditBehavior extends Behavior
                 foreach ($audit->errors as $key => $error) {
                     Yii::error($error[0], 'audit');
                 }
+                Yii::$app->db->rollBack();
+            } else {
+                Yii::$app->db->commit();
             }
         } else {
             // Now lets actually write the attributes
@@ -176,7 +179,7 @@ class AuditBehavior extends Behavior
         // Get the new and old attributes
         $newAttributes = $this->owner->getAttributes();
         $oldAttributes = $this->getOldAttributes();
-
+        Yii::$app->db->beginTransaction();
         foreach ($newAttributes as $key => $value) {
             if (in_array($key, $this->ignored)) {
                 continue;
@@ -207,9 +210,11 @@ class AuditBehavior extends Behavior
                     foreach ($audit->errors as $key => $error) {
                         Yii::error($error[0], 'audit');
                     }
+                    Yii::$app->db->rollBack();
                 }
             }
         }
+        Yii::$app->db->commit();
     }
 
     /**

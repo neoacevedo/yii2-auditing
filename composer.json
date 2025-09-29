@@ -18,9 +18,15 @@
             "email": "nestor.acevedo.romero@gmail.com"
         }
     ],
+    "funding": [
+        {
+            "type": "other",
+            "url": "https://ko-fi.com/neoacevedo"
+        }
+    ],
     "require": {
-        "php": ">=8.0",
-        "yiisoft/yii2": "~2.0.45"
+        "php": ">=8.2",
+        "yiisoft/yii2": "~2.0.54"
     },
     "autoload": {
         "psr-4": {
