@@ -1,5 +1,6 @@
 Yii2 Auditing
 =============
+
 Registra cambios de sus modelos ActiveRecord de Yii2.
 
 Este paquete permite mantener un historial de cambios de los modelos proveyendo información sobre posibles discrepancias o anomalías en la información que puedan indicar actividades sospechosas. La información recibida y almacenada se puede posteriormente desplegar de diversas maneras.
@@ -23,7 +24,6 @@ o agregue
 
 a la sección require de su archivo `composer.json`.
 
-
 Uso
 -----
 
@@ -34,7 +34,6 @@ Una vez que la extensión está instalada, en el archivo de configuración de la
 '@vendor/neoacevedo/yii2-auditing/neoacevedo/auditing/migrations',
 ...
 ```
-
 
 luego, agregue en el código de su modelo dentro del método `behaviors`:
 
@@ -120,16 +119,19 @@ Dentro de la vista `view` puede agregar el `GridView` para listar el histórico:
 ...
 ```
 
-Donaciones
-----------
+## Donaciones
 
-Si este proyecto te ha sido útil, considera hacer una donación para apoyar su desarrollo:
+Si este proyecto te es útil, considera hacer una donación:
 
-[![Ko-fi QR](ko-fi.png)](https://ko-fi.com/neoacevedo)
+<div align="center">
 
-![Ko-fi QR](ko-fi.png)
+| Ko-fi                                                  | Litecoin                                                     |
+| ------------------------------------------------------ | ------------------------------------------------------------ |
+| [![Ko-fi QR](ko-fi.png)](https://ko-fi.com/neoacevedo) | <img title="" src="Litecoin.jpg" alt="Litecoin" width="399"> |
+| ☕ [Ko-fi](https://ko-fi.com/neoacevedo)                | Ł Donaciones Litecoin                                        |
 
-### Litecoin
+</div>
 
-![Litecoin QR](Litecoin.jpg)
-```
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia GPL-3.0+ - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
