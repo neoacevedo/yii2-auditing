@@ -119,3 +119,17 @@ Dentro de la vista `view` puede agregar el `GridView` para listar el histórico:
     ]); ?>
 ...
 ```
+
+Donaciones
+----------
+
+Si este proyecto te ha sido útil, considera hacer una donación para apoyar su desarrollo:
+
+[![Ko-fi QR](ko-fi.png)](https://ko-fi.com/neoacevedo)
+
+![Ko-fi QR](ko-fi.png)
+
+### Litecoin
+
+![Litecoin QR](Litecoin.jpg)
+```

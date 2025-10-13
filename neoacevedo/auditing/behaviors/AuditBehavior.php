@@ -179,7 +179,7 @@ class AuditBehavior extends Behavior
         // Get the new and old attributes
         $newAttributes = $this->owner->getAttributes();
         $oldAttributes = $this->getOldAttributes();
-        Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         foreach ($newAttributes as $key => $value) {
             if (in_array($key, $this->ignored)) {
                 continue;
@@ -210,11 +210,11 @@ class AuditBehavior extends Behavior
                     foreach ($audit->errors as $key => $error) {
                         Yii::error($error[0], 'audit');
                     }
-                    Yii::$app->db->rollBack();
+                    $transaction->rollBack();
                 }
             }
         }
-        Yii::$app->db->commit();
+        $transaction->commit();
     }
 
     /**
